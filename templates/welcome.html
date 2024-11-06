@@ -1,0 +1,537 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Aria is a business focused HTML landing page template built with Bootstrap to help you create lead generation websites for companies and their services.">
+    <meta name="author" content="Inovatik">
+
+    <!-- OG Meta Tags to improve the way the post looks when you share the page on LinkedIn, Facebook, Google+ -->
+	<meta property="og:site_name" content="" /> <!-- website name -->
+	<meta property="og:site" content="" /> <!-- website link -->
+	<meta property="og:title" content=""/> <!-- title shown in the actual shared post -->
+	<meta property="og:description" content="" /> <!-- description shown in the actual shared post -->
+	<meta property="og:image" content="" /> <!-- image link, make sure it's jpg -->
+	<meta property="og:url" content="" /> <!-- where do you want your post to link to -->
+	<meta property="og:type" content="article" />
+
+    <!-- Website Title -->
+    <title>TBSC</title>
+    
+    <!-- Styles -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:500,700&display=swap&subset=latin-ext" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,600&display=swap&subset=latin-ext" rel="stylesheet">
+    <link href="{% static 'css1/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'css1/fontawesome-all.css' %}" rel="stylesheet">
+	<link href="{% static 'css1/styles.css' %}" rel="stylesheet">
+	
+	<!-- Favicon  -->
+    <link rel="icon" href="{% static 'images/logo1.png' %}">
+
+    <style>
+        
+        .weather-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 250px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            border-radius: 10px;
+            font-family: Arial, sans-serif;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .weather-widget.collapsed {
+            width: auto;
+            height: 40px;
+        }
+
+        .weather-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .weather-content {
+            padding: 0 10px 10px;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            max-height: 300px;
+            opacity: 1;
+        }
+
+        .weather-widget.collapsed .weather-content {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+
+        #weather-location {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        #weather-date {
+            font-size: 0.9em;
+            color: #ddd;
+        }
+
+        #weather-toggle {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0;
+        }
+
+        .weather-main {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        #weather-icon {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        #weather-temp {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        #weather-description {
+            color: #ddd;
+            margin-bottom: 5px;
+        }
+
+        #weather-high-low {
+            margin-bottom: 10px;
+        }
+
+        .weather-details {
+            display: flex;
+            justify-content: space-between;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .detail-item {
+            text-align: center;
+        }
+
+        .detail-label {
+            display: block;
+            font-size: 0.8em;
+            color: #aaa;
+            margin-bottom: 3px;
+        }
+        #toast-container {
+            position: fixed;
+            top: 20px;  /* Changed from bottom to top */
+            left: 50%;  /* Center horizontally */
+            transform: translateX(-50%);  /* Ensure perfect centering */
+            z-index: 9999;
+            width: 300px;  /* Set a fixed width */
+        }
+
+        .toast {
+            background-color: #333;
+            color: #fff;
+            padding: 15px 25px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            text-align: center;  /* Center the text */
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        .toast-success {
+            background-color: #4CAF50;
+        }
+
+        .toast-error {
+            background-color: #f44336;
+        }
+
+        .toast-info {
+            background-color: #2196F3;
+        }
+        
+    </style>
+</head>
+<body data-spy="scroll" data-target=".fixed-top">
+    
+    <!-- Preloader -->
+	<div class="spinner-wrapper">
+        <div class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
+    </div>
+    <!-- end of preloader -->
+    
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-md navbar-dark navbar-custom fixed-top">
+        <!-- Text Logo - Use this if you don't have a graphic logo -->
+        <!-- <a class="navbar-brand logo-text page-scroll" href="index.html">Aria</a> -->
+
+        <!-- Image Logo -->
+        <a class="navbar-brand logo-image" href="{% url 'index' %}">
+            <a class="navbar-brand logo-image" href="{% url 'index' %}">
+                <img src="{% static 'images/airplane.gif' %}" alt="BusGo Animated Logo" class="rounded-logo">
+            </a>
+          
+        
+        <!-- Mobile Menu Toggle Button -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-awesome fas fa-bars"></span>
+            <span class="navbar-toggler-awesome fas fa-times"></span>
+        </button>
+        <!-- end of mobile menu toggle button -->
+
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link page-scroll" href="{% url 'welcome' %}">HOME <span class="sr-only">(current)</span></a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link page-scroll" href="{% url 'booking' %}">BOOK BUS <span class="sr-only">(current)</span></a>
+                </li>
+                <!-- Dropdown Menu -->          
+                <li class="nav-item dropdown">
+                    {% if request.user.is_authenticated %}
+                    <a class="nav-link dropdown-toggle page-scroll" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Welcome, {{ request.user.first_name|default:"User" }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="userDropdown">
+                        <a class="dropdown-item" href="{% url 'profile' %}"><span class="item-text">Profile</span></a>
+                        <div class="dropdown-items-divide-hr"></div>
+                        <a class="dropdown-item" href="{% url 'your_bookings' %}"><span class="item-text">My Bookings</span></a>
+                        <div class="dropdown-items-divide-hr"></div>
+                        <a class="dropdown-item" href="{% url 'booking_cancellation' %}"><span class="item-text"> Cancel Booking</span></a>
+                        <div class="dropdown-items-divide-hr"></div>
+                        <a class="dropdown-item" href="{% url 'weather_forecast' %}"><span class="item-text">Weather Forecast</span></a>
+                        <div class="dropdown-items-divide-hr"></div>
+                        <a class="dropdown-item" href="{% url 'signout' %}"><span class="item-text">Logout</span></a>
+                        
+                    </div>
+                    {% endif %}
+                </li>
+                <!-- end of dropdown menu -->
+
+            </ul>
+            <span class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="notificationDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="fa-stack">
+                        <span class="hexagon"></span>
+                        <i class="fas fa-bell fa-stack-1x"></i>
+                    </span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationDropdown" id="notification-list">
+                    <!-- Notifications will be populated here -->
+                </div>
+            </span>
+        </div>
+    </nav> <!-- end of navbar -->
+    <!-- end of navbar -->
+
+
+    <!-- Header -->
+    <header id="header" class="header welcome-header1">
+        <div class="header-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-container">
+                            <h1>BUS <span id="js-rotating">TRAVEL, COMFORT, ADVENTURE</span></h1>
+                            <p class="p-heading p-large">BusGo is a leading bus travel platform offering comfortable and reliable journeys across the country</p>
+                            <a class="btn-solid-lg page-scroll" href="#intro">EXPLORE</a>
+                        </div>
+                    </div> <!-- end of col -->
+                </div> <!-- end of row -->
+            </div> <!-- end of container -->
+        </div> <!-- end of header-content -->
+    </header> <!-- end of header -->
+
+    
+
+    
+    	
+ <!-- Scripts -->
+<script src="{% static 'js1/jquery.min.js' %}"></script> <!-- jQuery for Bootstrap's JavaScript plugins -->
+<script src="{% static 'js1/popper.min.js' %}"></script> <!-- Popper tooltip library for Bootstrap -->
+<script src="{% static 'js1/bootstrap.min.js' %}"></script> <!-- Bootstrap framework -->
+<script src="{% static 'js1/jquery.easing.min.js' %}"></script> <!-- jQuery Easing for smooth scrolling between anchors -->
+<script src="{% static 'js1/swiper.min.js' %}"></script> <!-- Swiper for image and text sliders -->
+<script src="{% static 'js1/jquery.magnific-popup.js' %}"></script> <!-- Magnific Popup for lightboxes -->
+<script src="{% static 'js1/morphext.min.js' %}"></script> <!-- Morphtext rotating text in the header -->
+<script src="{% static 'js1/isotope.pkgd.min.js' %}"></script> <!-- Isotope for filter -->
+<script src="{% static 'js1/validator.min.js' %}"></script> <!-- Validator.js - Bootstrap plugin that validates forms -->
+<script src="{% static 'js1/scripts.js' %}"></script> <!-- Custom scripts -->
+<!-- Add this script at the end of your welcome.html file -->
+<script>
+    function updateNotifications() {
+        $.ajax({
+            url: '{% url "get_notifications" %}',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                $('#notification-count').text(data.count);
+                var notificationList = $('#notification-list');
+                notificationList.empty();
+                $.each(data.notifications, function(index, notification) {
+                    notificationList.append(
+                        '<a class="dropdown-item" href="#">' +
+                        notification.message +
+                        '<small class="text-muted d-block">' +
+                        notification.created_at +
+                        '</small></a>'
+                    );
+                });
+                if (data.count === 0) {
+                    notificationList.append('<a class="dropdown-item" href="#">No new notifications</a>');
+                }
+            }
+        });
+    }
+    
+    $(document).ready(function() {
+        updateNotifications();
+        setInterval(updateNotifications, 60000); // Update every minute
+
+        // Check for cancellation message
+        var cancellationMessage = localStorage.getItem('cancellationMessage');
+        if (cancellationMessage) {
+            showToast(cancellationMessage, 'success');
+            localStorage.removeItem('cancellationMessage');
+        }
+    });
+
+    function showToast(message, type = 'info') {
+        var toast = $('<div class="toast ' + type + '">' + message + '</div>');
+        $('#toast-container').append(toast);
+        toast.addClass('show');
+        setTimeout(function() {
+            toast.removeClass('show');
+            setTimeout(function() {
+                toast.remove();
+            }, 300);
+        }, 5000);
+    }
+</script>
+<div id="toast-container"></div>
+
+<div id="weather-widget" class="weather-widget">
+    <div class="weather-header">
+        <span id="weather-location"></span>
+        <span id="weather-date"></span>
+        <button id="weather-toggle">▼</button>
+    </div>
+    <div class="weather-content">
+        <div class="weather-main">
+            <img id="weather-icon" src="" alt="Weather icon">
+            <span id="weather-temp"></span>
+        </div>
+        <div id="weather-description"></div>
+        <div id="weather-high-low"></div>
+        <div class="weather-details">
+            <div class="detail-item">
+                <span class="detail-label">Humidity</span>
+                <span id="weather-humidity"></span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Precipitation</span>
+                <span id="weather-precipitation"></span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Wind</span>
+                <span id="weather-wind"></span>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function getWeatherData(latitude, longitude) {
+        $.ajax({
+            url: '{% url "get_weather_data" %}',
+            data: {
+                'latitude': latitude,
+                'longitude': longitude
+            },
+            success: function(data) {
+                $('#weather-location').text(data.city_name);
+                $('#weather-date').text(new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }));
+                $('#weather-icon').attr('src', `http://openweathermap.org/img/wn/${data.icon}@2x.png`);
+                $('#weather-temp').text(`${Math.round(data.temp)}°`);
+                $('#weather-description').text(data.description);
+                $('#weather-high-low').text(`H: ${Math.round(data.temp_max)}° L: ${Math.round(data.temp_min)}°`);
+                $('#weather-humidity').text(`${data.humidity}%`);
+                $('#weather-precipitation').text(`${data.precipitation}%`);
+                $('#weather-wind').text(`${data.wind} m/s`);
+            }
+        });
+    }
+    
+    $(document).ready(function() {
+        if ("geolocation" in navigator) {
+            var options = {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0
+            };
+            
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    getWeatherData(position.coords.latitude, position.coords.longitude);
+                },
+                function(error) {
+                    console.error("Error getting location:", error.message);
+                    // Handle the error (e.g., show a message to the user)
+                },
+                options
+            );
+        } else {
+            console.log("Geolocation is not supported by this browser.");
+            // Handle the lack of geolocation support
+        }
+
+        const weatherWidget = document.getElementById('weather-widget');
+        const weatherToggle = document.getElementById('weather-toggle');
+
+        weatherToggle.addEventListener('click', function() {
+            weatherWidget.classList.toggle('collapsed');
+            this.textContent = weatherWidget.classList.contains('collapsed') ? '▲' : '▼';
+        });
+    });
+    </script>
+
+<!-- Add this near the end of the body, before the closing </body> tag -->
+<div id="safetyAlertModal" class="safety-alert-modal">
+    <div class="safety-alert-content">
+        <div class="alert-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h2>Safety Alert!!!</h2>
+        <p>Check your email or SMS</p>
+        <button id="closeAlertModal" class="close-button">Close</button>
+    </div>
+</div>
+
+<style>
+    .safety-alert-modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .safety-alert-content {
+        background-color: #fff;
+        margin: 15% auto;
+        padding: 20px;
+        border-radius: 15px;
+        width: 300px;
+        text-align: center;
+        box-shadow: 0 0 20px rgba(255,0,0,0.6);
+        animation: slideIn 0.5s ease-out;
+    }
+
+    @keyframes slideIn {
+        from { transform: translateY(-50px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    .alert-icon {
+        font-size: 50px;
+        color: #ff3333;
+        margin-bottom: 20px;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+        100% { transform: scale(1); }
+    }
+
+    .safety-alert-content h2 {
+        color: #ff3333;
+        margin-bottom: 10px;
+    }
+
+    .safety-alert-content p {
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .close-button {
+        background-color: #ff3333;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .close-button:hover {
+        background-color: #cc0000;
+    }
+</style>
+
+<script>
+    function showSafetyAlert(message) {
+        document.getElementById('safetyAlertModal').style.display = 'block';
+    }
+
+    function checkSafetyAlerts() {
+        $.ajax({
+            url: '{% url "get_safety_alerts" %}',
+            type: 'GET',
+            success: function(response) {
+                if (response.has_alerts) {
+                    showSafetyAlert(response.alerts[0].message);
+                }
+            }
+        });
+    }
+
+    document.getElementById('closeAlertModal').addEventListener('click', function() {
+        document.getElementById('safetyAlertModal').style.display = 'none';
+    });
+
+    $(document).ready(function() {
+        checkSafetyAlerts();
+        setInterval(checkSafetyAlerts, 60000); // Check every minute
+    });
+</script>
+
+</body>
+</html>
